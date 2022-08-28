@@ -1,6 +1,5 @@
-# <img src="icon.png" width="71" height="71"/> ACR User Dialogs
+#ACR Maui User Dialogs
 
-This is an implementation of PCLCrypto which for for Maui although doesn;t have the BCrypt portion.  It is only a bridge to enable me to wrok until others upgdate their library.
+This is an implementation of ACR User Dialogs which for for Maui although doesn't have the limitation around missing Windows.  It is only a bridge to enable me to work until others upgdate their library.
 
-A cross platform library that allows you to call for standard user dialogs from a shared/portable library.
-Supports Android, iOS, and Unified Windows Platform (UWP, UAP)
+It also makes the Namespace nicer for seamless upgrade
