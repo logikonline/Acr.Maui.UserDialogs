@@ -1,0 +1,114 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.38">
+
+    <PropertyGroup>
+      <TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
+      <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
+      <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.17763.0</TargetFrameworks>
+      <UseMaui>true</UseMaui>
+      <UsingMauiEssentials>true</UsingMauiEssentials>
+      <SingleProject>true</SingleProject>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <PackageProjectUrl>https://github.com/aritchie/userdialogs</PackageProjectUrl>
+      <Product>$(AssemblyName) ($(TargetFramework))</Product>
+      <Authors>Allan Ritchie</Authors>
+      <Description>A cross platform library that allows you to call for standard user dialogs from a shared/portable library. Supports Android, iOS, and UWP</Description>
+      <PackageTags>windows ios android xamarin xam.pcl dialogs plugin</PackageTags>
+      <LibraryVersion Condition=" '$(LibraryVersion)' == '' ">8.3.1</LibraryVersion>
+      <PackageVersion>$(LibraryVersion)</PackageVersion>
+      <PackageReleaseNotes>https://github.com/aritchie/userdialogs/raw/master/ChangeLog.md</PackageReleaseNotes>
+      <PackageIconUrl>https://github.com/aritchie/userdialogs/raw/master/icon.png</PackageIconUrl>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <LangVersion>latest</LangVersion>
+      <NoWarn>$(NoWarn);1591;1701;1591;1702;1705;VSX1000;NU1603</NoWarn>
+      <RepositoryUrl>https://github.com/aritchie/userdialogs</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+      <!-- Display name -->
+      <ApplicationTitle>Acr.UserDialogs</ApplicationTitle>
+
+      <!-- App Identifier -->
+      <ApplicationId>com.marketally.symbey</ApplicationId>
+      <ApplicationIdGuid>E28A5390-3733-4FB0-8871-040170D568DB</ApplicationIdGuid>
+
+      <!-- Versions -->
+      <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+      <ApplicationVersion>1</ApplicationVersion>
+
+      <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+      <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+      <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
+      <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+      <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+      <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android32.0|AnyCPU'">
+      <JavaMaximumHeapSize />
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android32.0|AnyCPU'">
+      <JavaMaximumHeapSize />
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
+      <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
+      <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="readme.txt" pack="true" PackagePath="." />
+        <None Include="UserDialogs.cs" />
+        <None Include="Platforms\**\*.*" />
+        <Compile Remove="Platforms\**\*.*" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('monoandroid')) ">
+        <Compile Include="Platforms\Shared\**\*.cs" />
+        <Compile Include="Platforms\Android\**\*.cs" />
+        <PackageReference Include="AndHUD" Version="1.4.3" />
+        <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.4" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('xamarin.ios')) ">
+        <Compile Include="Platforms\Shared\**\*.cs" />
+        <Compile Include="Platforms\ios\**\*.cs" />
+        <Compile Include="Platforms\Apple\**\*.cs" />
+        <PackageReference Include="BTProgressHUD" Version="1.3.5" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('xamarin.tvos')) ">
+        <Compile Include="Platforms\Shared\**\*.cs" />
+        <Compile Include="Platforms\ios\**\*.cs" />
+        <Compile Include="Platforms\Apple\**\*.cs" />
+        <Compile Include="Platforms\tvOS\**\*.cs" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
+        <PackageReference Include="Coding4Fun.Toolkit.Controls" Version="2.1.8" />
+        <Compile Include="Platforms\Shared\**\*.cs" />
+        <Compile Include="Platforms\Windows\**\*.cs" />
+        <Page Include="Platforms\Windows\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+        <Compile Update="Platforms\Windows\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('tizen')) ">
+        <Compile Include="Platforms\Shared\**\*.cs" />
+        <Compile Include="Platforms\Tizen\**\*.cs" />
+        <EmbeddedResource Update="Platforms\Tizen\**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
+        <Compile Update="Platforms\Tizen\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
+        <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('xamarin.mac')) ">
+        <Compile Include="Platforms\Shared\**\*.cs" />
+        <Compile Include="Platforms\macOS\**\*.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Platforms\Shared\" />
+    </ItemGroup>
+</Project>
